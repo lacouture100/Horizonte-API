@@ -8,36 +8,14 @@ const moment = require("moment"); //include the moment package
 const sunCalc = require("suncalc");
 
 // NYC coords 
-var lat = 40.69;
-var long = -73.98;
+var nyclat = 40.69;
+var nyclong = -73.98;
 
 // Response in this format: 2020-03-05T09:23:03-05:00
 let logTime = moment().format().toString();
 
-// Get suncalc times
-var times = sunCalc.getTimes(new Date(), lat, long);
-
-var sunrise = times.sunrise.getHours() + ':' + times.sunrise.getMinutes();
-var sunriseEnd = times.sunriseEnd.getHours() + ':' + times.sunriseEnd.getMinutes();
-var morningGoldenHourEnd = times.goldenHourEnd.getHours() + ':' + times.goldenHourEnd.getMinutes();
-var solarNoon = times.solarNoon.getHours() + ':' + times.solarNoon.getMinutes();
-var goldenHour = times.goldenHour.getHours() + ':' + times.goldenHour.getMinutes();
-var sunsetStart = times.goldenHour.getHours() + ':' + times.goldenHour.getMinutes();
-var sunset = times.sunset.getHours() + ':' + times.sunset.getMinutes();
-var dusk = times.dusk.getHours() + ':' + times.dusk.getMinutes();
-var night = times.night.getHours() + ':' + times.night.getMinutes();
-var nadir = times.nadir.getHours() + ':' + times.nadir.getMinutes();
-var nightEnd = times.nightEnd.getHours() + ':' + times.nightEnd.getMinutes();
-var nauticalDawn = times.nauticalDawn.getHours() + ':' + times.nauticalDawn.getMinutes();
-var dawn = times.dawn.getHours() + ':' + times.dawn.getMinutes();
-var sunPos = sunCalc.getPosition(new Date(), /*Number*/ lat, /*Number*/ long);
-
-console.log(sunPos)
-
-
 //__dirname is the absolute path of the directory containing the currently executing file.
 const indexPath = path.join(__dirname, 'views/index.html');
-
 
 //define express inside of a variable
 const app = express();
@@ -50,8 +28,37 @@ app.use(express.json());
 app.get('/', (req, res) => res.sendFile(indexPath))
 
 
-function getTimes() {
+    // Get suncalc times
+    var times = sunCalc.getTimes(new Date(), nyclat, nyclong);
 
+    var sunrise              = convertToTimeFormat(times.sunrise.getHours()) + ':' + convertToTimeFormat(times.sunrise.getMinutes()) + ":00";
+    var sunriseEnd           = convertToTimeFormat(times.sunriseEnd.getHours()) + ':' + convertToTimeFormat(times.sunriseEnd.getMinutes()) + ":00";
+    var morningGoldenHourEnd = convertToTimeFormat(times.goldenHourEnd.getHours()) + ':' + convertToTimeFormat(times.goldenHourEnd.getMinutes()) + ":00";
+    var solarNoon            = convertToTimeFormat(times.solarNoon.getHours()) + ':' + convertToTimeFormat(times.solarNoon.getMinutes()) + ":00";
+    var goldenHour           = convertToTimeFormat(times.goldenHour.getHours()) + ':' + convertToTimeFormat(times.goldenHour.getMinutes()) + ":00";
+    var sunsetStart          = convertToTimeFormat(times.sunsetStart.getHours()) + ':' + convertToTimeFormat(times.sunsetStart.getMinutes()) + ":00";
+    var sunset               = convertToTimeFormat(times.sunset.getHours()) + ':' + convertToTimeFormat(times.sunset.getMinutes()) + ":00";
+    var dusk                 = convertToTimeFormat(times.dusk.getHours()) + ':' + convertToTimeFormat(times.dusk.getMinutes()) + ":00";
+    var night                = convertToTimeFormat(times.night.getHours()) + ':' + convertToTimeFormat(times.night.getMinutes()) + ":00";
+    var nadir                = convertToTimeFormat(times.nadir.getHours()) + ':' + convertToTimeFormat(times.nadir.getMinutes()) + ":00";
+    var nightEnd             = convertToTimeFormat(times.nightEnd.getHours()) + ':' + convertToTimeFormat(times.nightEnd.getMinutes()) + ":00";
+    var nauticalDawn         = convertToTimeFormat(times.nauticalDawn.getHours()) + ':' + convertToTimeFormat(times.nauticalDawn.getMinutes()) + ":00";
+    var dawn                 = convertToTimeFormat(times.dawn.getHours()) + ':' + convertToTimeFormat(times.dawn.getMinutes()) + ":00";
+
+
+    function convertToTimeFormat(time){
+        if(time.toString().length ==1){
+            let str = "0";
+            let result = str.concat(time);
+            return result;
+        }
+        else{
+            let result = time.toString();
+            return result;
+        }    
+    }
+
+function getTimes(lat, long) {
     //Read our sunEvents in order to update the data on each request.
     const sunEventsJSON = fs.readFileSync(path.join(__dirname, '/data/suncalcData.json'));
     //parse our JSON
@@ -71,18 +78,112 @@ function getTimes() {
     sunEvents.nauticalDawn.time = nauticalDawn;
     sunEvents.dawn.time = dawn;
 
-    fs.writeFileSync(path.join(__dirname, '/data/suncalcData.json'), JSON.stringify(sunEvents));
+  
+    
+    writeToJSON(sunEvents)
+
     return sunEvents;
+}
+
+function writeToJSON(data) {
+    fs.writeFileSync(path.join(__dirname, '/data/suncalcData.json'), JSON.stringify(data));
 }
 
 //Express GET request
 app.get("/sun", (req, res) => {
     //read from the toppings json
-    const sunEvents = getTimes();
+    const sunEvents = getTimes(40,-73);
     console.log(`Received request: ${req}`);
     // Updated list will be returned by API
     res.json(sunEvents);
 });
+
+
+//Express GET request
+app.get("/now", (req, res) => {
+    //read from the toppings json
+    const sunEvents = getTimes(40,-73);
+    console.log(`Received request: ${req}`);
+    // Updated list will be returned by API
+    res.json(Date.now());
+});
+
+function stringToMillis(time){
+    // Time enters in a HH:MM:SS format, and exits as amount of milliseconds which have passed since midnight, or 00:00:00
+    let hours = parseInt(time.slice(0,2))
+    //console.log(`Hours: ${hours}`)
+    let minutes = parseInt(time.slice(3,5))
+    //console.log(`Minutes: ${minutes}`)
+    let seconds = parseInt(time.slice(6,8))
+    //console.log(`Seconds: ${seconds}`)
+    // Current hour * 60 minutes per hour * 60 seconds per minute * 1000 milliseconds per minute.
+    let hoursInMillis = hours * 60 * 60 * 1000;
+    // Current hour * 60 seconds per minute * 1000 milliseconds per minute.
+    let minutesInMillis = minutes * 60 * 1000;
+    // Current hour * 1000 milliseconds per minute.
+    let secondsInMillis = seconds * 1000;
+    let TimeInMillis = hoursInMillis + minutesInMillis + secondsInMillis;
+    return TimeInMillis;
+}
+//2020-10-11T00:16:21.603Z
+
+function currentTimeGMT(GMT = 0){
+    const utcDate = new Date(Date.now()).toUTCString();
+    //let cleanTime = utcDate.slice(17,25);
+    let cleanTime = "19:37:00";
+    console.log(`UTC Date              : ${utcDate}`);
+    let GMTchangeInMillis = GMT * 60 * 60 * 1000;
+    let currentTimeInMillis = stringToMillis(cleanTime) + GMTchangeInMillis;
+    console.log(`CurrentTime           : ${cleanTime} | ${currentTimeInMillis}`);
+
+    return currentTimeInMillis;
+    
+}
+
+//Receive GMT from cellphone const utcDate1 = new Date(Date.now());
+function timePixelRatio( ){
+
+  //currentTime in milliseconds
+  let currentTimeInMillis = currentTimeGMT(0);
+  
+
+  // totalDayTime in milliseconds
+  let dawnTime = dawn;
+  let nightTime = "19:55:00";
+  let totalDayTime = stringToMillis(nightTime) - stringToMillis(dawnTime);
+
+  let timeLeft = stringToMillis(nightTime) - currentTimeInMillis;
+
+  console.log(`Dawn Time          : ${dawnTime} | ${stringToMillis(dawnTime)}`);
+  console.log(`Night Time            : ${nightTime} | ${stringToMillis(nightTime)}`);
+
+  console.log(`Total Day Time        : ${totalDayTime}`);
+  console.log(`Time until night      : ${timeLeft}`)
+
+  var numberOfPixels = 144;
+  var millisPerPixel = Math.floor(totalDayTime/numberOfPixels);
+  var currentPixel = Math.floor((currentTimeInMillis- stringToMillis(dawnTime))/millisPerPixel);
+  console.log(`Time per pixel        : ${millisPerPixel}`);
+  console.log(`Current Pixel         : ${currentPixel}`);
+
+  console.log(`Night End             : ${nightEnd} | ${stringToMillis(nightEnd)}  `)
+  console.log(`Nautical Dawn         : ${nauticalDawn} | ${stringToMillis(nauticalDawn)} `)
+  console.log(`Dawn                  : ${dawn} | ${stringToMillis(dawn)} | Pixel No. ${Math.floor((stringToMillis(dawn)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Sunrise               : ${sunrise} | ${stringToMillis(sunrise)} | Pixel No. ${Math.floor((stringToMillis(sunrise)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Sunrise End           : ${sunriseEnd} | ${stringToMillis(sunriseEnd)} | Pixel No. ${Math.floor((stringToMillis(sunriseEnd)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Golden Hour End       : ${morningGoldenHourEnd} | ${stringToMillis(morningGoldenHourEnd)} | Pixel No. ${Math.floor((stringToMillis(morningGoldenHourEnd)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Solar Noon            : ${solarNoon} | ${stringToMillis(solarNoon)} | Pixel No. ${Math.floor((stringToMillis(solarNoon)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Golden Hour           : ${goldenHour} | ${stringToMillis(goldenHour)} | Pixel No. ${Math.floor((stringToMillis(goldenHour)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Sunset Start          : ${sunsetStart} | ${stringToMillis(sunsetStart)} | Pixel No. ${Math.floor((stringToMillis(sunsetStart)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Sunset                : ${sunset} | ${stringToMillis(sunset)} | Pixel No. ${Math.floor((stringToMillis(sunset)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Dusk                  : ${dusk} | ${stringToMillis(dusk)} | Pixel No. ${Math.floor((stringToMillis(dusk)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  console.log(`Night                 : ${night} | ${stringToMillis(night)} | Pixel No. ${Math.floor((stringToMillis(night)- stringToMillis(dawnTime))/millisPerPixel)}`)
+  //console.log(`Nadir                 : ${nadir} | ${stringToMillis(nadir)} `)
+
+
+}
+
+timePixelRatio();
 
 //Open the PORT
 app.listen(PORT, () => console.log(`Server app listening on PORT ${PORT}!`))

@@ -71,9 +71,9 @@ async function setup() {
 
   text("Adjust this slider to change the" +
     " amount of lerping", 20, 200)
-  alphaSlider = createSlider(0, 100, 50);
-  alphaSlider.position(20, 220);
-  alphaSlider.style('width', '250px');
+  //alphaSlider = createSlider(0, 100, 50);
+  //alphaSlider.position(20, 220);
+  //alphaSlider.style('width', '250px');
   
   let initialX = 20;
   let initialY = 300;
@@ -107,21 +107,4 @@ async function setup() {
       nauticalDawn = result.nauticalDawn;
       dawn = result.dawn;
 
-}
-
-async function draw() {
-  lerpedColor = lerpColor(fromColor, toColor, alphaSlider.value() / 100);
-  
-
-  fill(fromColor);
-  rect(30, 30, 50, 100);
-
-  fill(lerpedColor);
-  rect(170, 30, 50, 100);
-
-  fill(toColor);
-  rect(310, 30, 50, 100);
-
-  fill(toColor);
-  rect(450, 30, 50, 100);
 }
