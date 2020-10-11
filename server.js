@@ -64,20 +64,34 @@ function getTimes(lat, long) {
     //parse our JSON
     const sunEvents = JSON.parse(sunEventsJSON);
     // Set the updated values
-    sunEvents.sunrise.time = sunriseEnd;
-    sunEvents.sunriseEnd.time = sunriseEnd;
-    sunEvents.morningGoldenHourEnd.time = morningGoldenHourEnd;
-    sunEvents.solarNoon.time = solarNoon;
-    sunEvents.goldenHour.time = goldenHour;
-    sunEvents.sunsetStart.time = sunsetStart;
-    sunEvents.sunset.time = sunset;
-    sunEvents.dusk.time = dusk;
-    sunEvents.night.time = night;
-    sunEvents.nadir.time = nadir;
-    sunEvents.nightEnd.time = nightEnd;
-    sunEvents.nauticalDawn.time = nauticalDawn;
-    sunEvents.dawn.time = dawn;
+    sunEvents.sunrise.time.format = sunriseEnd;
+    sunEvents.sunriseEnd.time.format = sunriseEnd;
+    sunEvents.morningGoldenHourEnd.time.format = morningGoldenHourEnd;
+    sunEvents.solarNoon.time.format = solarNoon;
+    sunEvents.goldenHour.time.format = goldenHour;
+    sunEvents.sunsetStart.time.format = sunsetStart;
+    sunEvents.sunset.time.format = sunset;
+    sunEvents.dusk.time.format = dusk;
+    sunEvents.night.time.format = night;
+    sunEvents.nadir.time.format = nadir;
+    sunEvents.nightEnd.time.format = nightEnd;
+    sunEvents.nauticalDawn.time.format = nauticalDawn;
+    sunEvents.dawn.time.format = dawn;
 
+     // Set the updated values
+     sunEvents.sunrise.time.ms = stringToMillis(sunriseEnd);
+     sunEvents.sunriseEnd.time.ms = stringToMillis(sunriseEnd);
+     sunEvents.morningGoldenHourEnd.time.ms = stringToMillis(morningGoldenHourEnd);
+     sunEvents.solarNoon.time.ms = stringToMillis(solarNoon);
+     sunEvents.goldenHour.time.ms = stringToMillis(goldenHour);
+     sunEvents.sunsetStart.time.ms = stringToMillis(sunsetStart);
+     sunEvents.sunset.time.ms = stringToMillis(sunset);
+     sunEvents.dusk.time.ms = stringToMillis(dusk);
+     sunEvents.night.time.ms = stringToMillis(night);
+     sunEvents.nadir.time.ms = stringToMillis(nadir);
+     sunEvents.nightEnd.time.ms = stringToMillis(nightEnd);
+     sunEvents.nauticalDawn.time.ms = stringToMillis(nauticalDawn);
+     sunEvents.dawn.time.ms = stringToMillis(dawn);
   
     
     writeToJSON(sunEvents)
