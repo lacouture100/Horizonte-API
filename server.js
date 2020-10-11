@@ -184,7 +184,6 @@ function timePixelRatio( ){
 }
 
 timePixelRatio();
-
 //Open the PORT
 app.listen(PORT, () => console.log(`Server app listening on PORT ${PORT}!`))
 getTimes()

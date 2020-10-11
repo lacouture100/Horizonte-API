@@ -92,7 +92,7 @@ async function setup() {
   text(`Nautical Dawn is at ${nauticalDawn.time}`,initialX,initialY+20 *11);
   text(`Dawn is at ${dawn.time}`,initialX,initialY+20 *12);
 
-  
+  /*
       sunrise = result.sunrise;
       sunriseEnd = result.sunriseEnd;
       morningGoldenHourEnd = result.morningGoldenHourEnd;
@@ -106,5 +106,5 @@ async function setup() {
       nightEnd = result.nightEnd;
       nauticalDawn = result.nauticalDawn;
       dawn = result.dawn;
-
+*/
 }
