@@ -120,6 +120,7 @@ app.get("/now", (req, res) => {
     console.log(`Received request: ${req}`);
     // Updated list will be returned by API
     res.json(Date.now());
+    timePixelRatio();
 });
 
 function stringToMillis(time){
