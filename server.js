@@ -164,7 +164,7 @@ function timePixelRatio( ){
 
   // totalDayTime in milliseconds
   let dawnTime = dawn;
-  let nightTime = "19:55:00";
+  let nightTime = dusk;
   let totalDayTime = stringToMillis(nightTime) - stringToMillis(dawnTime);
 
   let timeLeft = stringToMillis(nightTime) - currentTimeInMillis;
@@ -178,6 +178,8 @@ function timePixelRatio( ){
   var numberOfPixels = 144;
   var millisPerPixel = Math.floor(totalDayTime/numberOfPixels);
   var currentPixel = Math.floor((currentTimeInMillis- stringToMillis(dawnTime))/millisPerPixel);
+
+  
   console.log(`Time per pixel        : ${millisPerPixel}`);
   console.log(`Current Pixel         : ${currentPixel}`);
 
