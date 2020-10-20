@@ -60,10 +60,11 @@ app.get('/', (req, res) => res.sendFile(indexPath))
 
 function getTimes(lat, long) {
     //Read our sunEvents in order to update the data on each request.
-    const sunEventsJSON = fs.readFileSync(path.join(__dirname, '/data/suncalcData.json'));
+    const sunEventsJSON = fs.readFileSync(path.join(__dirname, '/data/sunTimesData.json'));
     //parse our JSON
     const sunEvents = JSON.parse(sunEventsJSON);
     // Set the updated values
+    sunEvents.dawn.time.format = dawn;
     sunEvents.sunrise.time.format = sunriseEnd;
     sunEvents.sunriseEnd.time.format = sunriseEnd;
     sunEvents.morningGoldenHourEnd.time.format = morningGoldenHourEnd;
@@ -76,9 +77,10 @@ function getTimes(lat, long) {
     sunEvents.nadir.time.format = nadir;
     sunEvents.nightEnd.time.format = nightEnd;
     sunEvents.nauticalDawn.time.format = nauticalDawn;
-    sunEvents.dawn.time.format = dawn;
+
 
      // Set the updated values
+     sunEvents.dawn.time.ms = stringToMillis(dawn);
      sunEvents.sunrise.time.ms = stringToMillis(sunriseEnd);
      sunEvents.sunriseEnd.time.ms = stringToMillis(sunriseEnd);
      sunEvents.morningGoldenHourEnd.time.ms = stringToMillis(morningGoldenHourEnd);
@@ -91,7 +93,7 @@ function getTimes(lat, long) {
      sunEvents.nadir.time.ms = stringToMillis(nadir);
      sunEvents.nightEnd.time.ms = stringToMillis(nightEnd);
      sunEvents.nauticalDawn.time.ms = stringToMillis(nauticalDawn);
-     sunEvents.dawn.time.ms = stringToMillis(dawn);
+
   
     
     writeToJSON(sunEvents)
@@ -100,14 +102,14 @@ function getTimes(lat, long) {
 }
 
 function writeToJSON(data) {
-    fs.writeFileSync(path.join(__dirname, '/data/suncalcData.json'), JSON.stringify(data));
+    fs.writeFileSync(path.join(__dirname, '/data/sunTimesData.json'), JSON.stringify(data));
 }
 
 //Express GET request
 app.get("/sun", (req, res) => {
     //read from the toppings json
     const sunEvents = getTimes(40,-73);
-    console.log(`Received request: ${req}`);
+    console.log(`Received request for Sun times: ${req}`);
     // Updated list will be returned by API
     res.json(sunEvents);
 });
@@ -116,12 +118,13 @@ app.get("/sun", (req, res) => {
 //Express GET request
 app.get("/now", (req, res) => {
     //read from the toppings json
-    const sunEvents = getTimes(40,-73);
-    console.log(`Received request: ${req}`);
+
+    console.log(`Received request for what time it is: ${req}`);
     // Updated list will be returned by API
-    res.json(Date.now());
+    res.json(currentTimeOfDayInMillis());
     timePixelRatio();
 });
+
 
 function stringToMillis(time){
     // Time enters in a HH:MM:SS format, and exits as amount of milliseconds which have passed since midnight, or 00:00:00
@@ -143,13 +146,13 @@ function stringToMillis(time){
 //2020-10-11T00:16:21.603Z
 
 function currentTimeGMT(GMT = 0){
-    const utcDate = new Date(Date.now()).toUTCString();
+    const utcTime = new Date(Date.now()).toUTCString();
     //let cleanTime = utcDate.slice(17,25);
-    let cleanTime = "19:37:00";
-    console.log(`UTC Date              : ${utcDate}`);
+    //let cleanTime = "19:37:00";
+    console.log(`UTC Date              : ${utcTime}`);
     let GMTchangeInMillis = GMT * 60 * 60 * 1000;
-    let currentTimeInMillis = stringToMillis(cleanTime) + GMTchangeInMillis;
-    console.log(`CurrentTime           : ${cleanTime} | ${currentTimeInMillis}`);
+    let currentTimeInMillis = stringToMillis(utcTime) + GMTchangeInMillis;
+    console.log(`CurrentTime           : ${utcTime} | ${currentTimeOfDayInMillis()}`);
 
     return currentTimeInMillis;
     
@@ -163,11 +166,13 @@ function timePixelRatio( ){
   
 
   // totalDayTime in milliseconds
+  // startTime
   let dawnTime = dawn;
-  let nightTime = dusk;
+  // Endtime
+  let nightTime = night;
   let totalDayTime = stringToMillis(nightTime) - stringToMillis(dawnTime);
 
-  let timeLeft = stringToMillis(nightTime) - currentTimeInMillis;
+  let timeLeft = stringToMillis(nightTime) - currentTimeOfDayInMillis();
 
   console.log(`Dawn Time          : ${dawnTime} | ${stringToMillis(dawnTime)}`);
   console.log(`Night Time            : ${nightTime} | ${stringToMillis(nightTime)}`);
@@ -177,7 +182,7 @@ function timePixelRatio( ){
 
   var numberOfPixels = 144;
   var millisPerPixel = Math.floor(totalDayTime/numberOfPixels);
-  var currentPixel = Math.floor((currentTimeInMillis- stringToMillis(dawnTime))/millisPerPixel);
+  var currentPixel = Math.floor((currentTimeOfDayInMillis()- stringToMillis(dawnTime))/millisPerPixel);
 
   
   console.log(`Time per pixel        : ${millisPerPixel}`);
@@ -200,7 +205,31 @@ function timePixelRatio( ){
 
 }
 
+function currentGMTTimeInMillis(){
+    const utcDate = new Date(Date.now());
+    const utcDateInMillis = Date.now();
+    const timezoneOffset = utcDate.getTimezoneOffset();
+    const GMTchangeInMillis = (timezoneOffset * -1) * 60 * 1000;
+    const currentTimeInMillis = utcDateInMillis + GMTchangeInMillis;
+    return currentTimeInMillis;
+}
+
+/*https://stackoverflow.com/questions/10944396/how-to-calculate-ms-since-midnight-in-javascript*/
+function currentTimeOfDayInMillis(){
+    var now = new Date(),
+    then = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        0,0,0),
+    diff = now.getTime() - then.getTime();
+    return diff;
+}
+
+
 timePixelRatio();
 //Open the PORT
 app.listen(PORT, () => console.log(`Server app listening on PORT ${PORT}!`))
 getTimes()
+
+
