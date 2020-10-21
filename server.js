@@ -180,32 +180,26 @@ function timePixelRatio( ){
   console.log(`Total Day Time        : ${totalDayTime}`);
   console.log(`Time until night      : ${timeLeft}`)
 
-  var numberOfPixels = 144;
-  var millisPerPixel = Math.floor(totalDayTime/numberOfPixels);
-  var currentPixel = Math.floor((currentTimeOfDayInMillis()- stringToMillis(dawnTime))/millisPerPixel);
-
   
   console.log(`Time per pixel        : ${millisPerPixel}`);
   console.log(`Current Pixel         : ${currentPixel}`);
 
   console.log(`Night End             : ${nightEnd} | ${stringToMillis(nightEnd)}  `)
   console.log(`Nautical Dawn         : ${nauticalDawn} | ${stringToMillis(nauticalDawn)} `)
-  console.log(`Dawn                  : ${dawn} | ${stringToMillis(dawn)} | Pixel No. ${Math.floor((stringToMillis(dawn)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Sunrise               : ${sunrise} | ${stringToMillis(sunrise)} | Pixel No. ${Math.floor((stringToMillis(sunrise)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Sunrise End           : ${sunriseEnd} | ${stringToMillis(sunriseEnd)} | Pixel No. ${Math.floor((stringToMillis(sunriseEnd)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Golden Hour End       : ${morningGoldenHourEnd} | ${stringToMillis(morningGoldenHourEnd)} | Pixel No. ${Math.floor((stringToMillis(morningGoldenHourEnd)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Solar Noon            : ${solarNoon} | ${stringToMillis(solarNoon)} | Pixel No. ${Math.floor((stringToMillis(solarNoon)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Golden Hour           : ${goldenHour} | ${stringToMillis(goldenHour)} | Pixel No. ${Math.floor((stringToMillis(goldenHour)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Sunset Start          : ${sunsetStart} | ${stringToMillis(sunsetStart)} | Pixel No. ${Math.floor((stringToMillis(sunsetStart)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Sunset                : ${sunset} | ${stringToMillis(sunset)} | Pixel No. ${Math.floor((stringToMillis(sunset)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Dusk                  : ${dusk} | ${stringToMillis(dusk)} | Pixel No. ${Math.floor((stringToMillis(dusk)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  console.log(`Night                 : ${night} | ${stringToMillis(night)} | Pixel No. ${Math.floor((stringToMillis(night)- stringToMillis(dawnTime))/millisPerPixel)}`)
-  //console.log(`Nadir                 : ${nadir} | ${stringToMillis(nadir)} `)
-
+  console.log(`Dawn                  : ${dawn} | ${stringToMillis(dawn)} | }`)
+  console.log(`Sunrise               : ${sunrise} | ${stringToMillis(sunrise)} | }`)
+  console.log(`Sunrise End           : ${sunriseEnd} | ${stringToMillis(sunriseEnd)} | }`)
+  console.log(`Golden Hour End       : ${morningGoldenHourEnd} | ${stringToMillis(morningGoldenHourEnd)} | }`)
+  console.log(`Solar Noon            : ${solarNoon} | ${stringToMillis(solarNoon)} | }`)
+  console.log(`Golden Hour           : ${goldenHour} | ${stringToMillis(goldenHour)} |}`)
+  console.log(`Sunset Start          : ${sunsetStart} | ${stringToMillis(sunsetStart)} | }`)
+  console.log(`Sunset                : ${sunset} | ${stringToMillis(sunset)} | }`)
+  console.log(`Dusk                  : ${dusk} | ${stringToMillis(dusk)} }`)
+  console.log(`Night                 : ${night} | ${stringToMillis(night)} }`)
 
 }
 
-function currentGMTTimeInMillis(){
+function currentUTCTimeInMillis(){
     const utcDate = new Date(Date.now());
     const utcDateInMillis = Date.now();
     const timezoneOffset = utcDate.getTimezoneOffset();
