@@ -1,3 +1,7 @@
+## Horizonte API 
+
+This is the repository for the Horizonte Clock server and website. You can find more instructions below if you wish to check it out.
+
 
 ### Prerequisites
 
