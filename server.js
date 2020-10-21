@@ -181,21 +181,19 @@ function timePixelRatio( ){
   console.log(`Time until night      : ${timeLeft}`)
 
   
-  console.log(`Time per pixel        : ${millisPerPixel}`);
-  console.log(`Current Pixel         : ${currentPixel}`);
 
   console.log(`Night End             : ${nightEnd} | ${stringToMillis(nightEnd)}  `)
-  console.log(`Nautical Dawn         : ${nauticalDawn} | ${stringToMillis(nauticalDawn)} `)
-  console.log(`Dawn                  : ${dawn} | ${stringToMillis(dawn)} | }`)
-  console.log(`Sunrise               : ${sunrise} | ${stringToMillis(sunrise)} | }`)
-  console.log(`Sunrise End           : ${sunriseEnd} | ${stringToMillis(sunriseEnd)} | }`)
-  console.log(`Golden Hour End       : ${morningGoldenHourEnd} | ${stringToMillis(morningGoldenHourEnd)} | }`)
-  console.log(`Solar Noon            : ${solarNoon} | ${stringToMillis(solarNoon)} | }`)
-  console.log(`Golden Hour           : ${goldenHour} | ${stringToMillis(goldenHour)} |}`)
-  console.log(`Sunset Start          : ${sunsetStart} | ${stringToMillis(sunsetStart)} | }`)
-  console.log(`Sunset                : ${sunset} | ${stringToMillis(sunset)} | }`)
-  console.log(`Dusk                  : ${dusk} | ${stringToMillis(dusk)} }`)
-  console.log(`Night                 : ${night} | ${stringToMillis(night)} }`)
+  console.log(`Nautical Dawn         : ${nauticalDawn} | ${stringToMillis(nauticalDawn)}`)
+  console.log(`Dawn                  : ${dawn} | ${stringToMillis(dawn)}`)
+  console.log(`Sunrise               : ${sunrise} | ${stringToMillis(sunrise)}`)
+  console.log(`Sunrise End           : ${sunriseEnd} | ${stringToMillis(sunriseEnd)}`)
+  console.log(`Golden Hour End       : ${morningGoldenHourEnd} | ${stringToMillis(morningGoldenHourEnd)}`)
+  console.log(`Solar Noon            : ${solarNoon} | ${stringToMillis(solarNoon)}`)
+  console.log(`Golden Hour           : ${goldenHour} | ${stringToMillis(goldenHour)}`)
+  console.log(`Sunset Start          : ${sunsetStart} | ${stringToMillis(sunsetStart)}`)
+  console.log(`Sunset                : ${sunset} | ${stringToMillis(sunset)}`)
+  console.log(`Dusk                  : ${dusk} | ${stringToMillis(dusk)}`)
+  console.log(`Night                 : ${night} | ${stringToMillis(night)}`)
 
 }
 
