@@ -34,7 +34,7 @@ async function fetchData() {
       return response.json()
     })
     .then(result => {
-
+      dawn = result.dawn;
       sunrise = result.sunrise;
       sunriseEnd = result.sunriseEnd;
       morningGoldenHourEnd = result.morningGoldenHourEnd;
@@ -47,9 +47,7 @@ async function fetchData() {
       nadir = result.nadir;
       nightEnd = result.nightEnd;
       nauticalDawn = result.nauticalDawn;
-      dawn = result.dawn;
 
-      console.log(sunrise.time);
     })
 
 }
@@ -63,7 +61,7 @@ async function setup() {
 
   let initialX = 20;
   let initialY = 300;
-  timeColorSelector(0,"Night ", nightEnd, 0, 0) 
+
 
   text(`Night ends at ${nightEnd.time.format}`, initialX, initialY + 20 * 10);
   text(`Nautical Dawn is at ${nauticalDawn.time.format}`, initialX, initialY + 20 * 11);
@@ -95,33 +93,5 @@ async function setup() {
       nauticalDawn = result.nauticalDawn;
       dawn = result.dawn;
 */
-}
-
-
-function timeColorSelector(index,timeName, time, initialX, initialY, leftOffset = 20) {
-  text(`${timeName} is at ${time.time.format}`, initialX+leftOffset, initialY + 20 * 10);
-
-  topPicker = createColorPicker(color(255, 0, 0));
-  bottomPicker = createColorPicker(color(0, 255, 0));
-  topPicker.position(initialX+leftOffset, initialY );
-  bottomPicker.position(initialX+leftOffset, initialY  + 25);
-  let commonShade = lerpColor(topPicker.color(), bottomPicker.color(), 0.5);
-  fill(commonShade);
-  //rect(initialX+leftOffset, initialY+leftOffset, 60, 60);
-  setGradient(topPicker.color(), bottomPicker.color(),200, 200, 200, 200, 200) 
-
-}
-
-function setGradient(c1, c2, yOffset, leftOffset, bandWidth = width/20 ) {
-  // noprotect
-  noFill();
-  for (var y = 0; y < height; y++) {
-    var inter = map(y, 0, height/3, 0, 1);
-    var c = lerpColor(c1, c2, inter);
-    stroke(c);
-    line(leftOffset, y+yOffset, leftOffset + bandWidth , y+yOffset);
-  }
-}
-function draw() {
 }
 
